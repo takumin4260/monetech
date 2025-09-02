@@ -1,7 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import validates
 from database import Base
-import re
 
 
 class User(Base):
