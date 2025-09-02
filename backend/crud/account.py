@@ -3,7 +3,7 @@ from models.account import Account
 from schemas.account import AccountCreate
 
 
-def get_account(db: Session, account_number: int) -> Account | None:
+def get_account_by_account_number(db: Session, account_number: int) -> Account | None:
     return db.query(Account).filter(Account.account_number == account_number).first()
 
 
