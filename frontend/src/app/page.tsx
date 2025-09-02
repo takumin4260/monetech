@@ -2,6 +2,7 @@ import React from 'react';
 import Link from "next/link"; 
 import Image from "next/image";
 
+
 export default function MobileAccountScreen() {
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
@@ -40,7 +41,7 @@ export default function MobileAccountScreen() {
         </div>
 
         <div className="flex justify-center">
-          <Link href="/users">
+          <Link href="/send/users">
             <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
               送金する
             </button>

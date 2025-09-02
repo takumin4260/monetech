@@ -28,7 +28,7 @@ const recipients = [
         {recipients.map((recipient) => (
           <Link
             key={recipient.id}
-            href="/users/1"
+            href="users/1"
             className="block"
           >
             <div
