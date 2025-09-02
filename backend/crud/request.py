@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
 from models.request import Request
-from schemas.request import Request, RequestCreate
+from schemas.request import RequestCreate
 from uuid import UUID
-from datetime import datetime
 
 
 def get_request_by_id(db: Session, request_id: UUID):

@@ -1,11 +1,11 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, NonNegativeInt
 from datetime import datetime
 from uuid import UUID
 
 
 class RequestBase(BaseModel):
     # 後でcreated_byをlogin_userに置き換える
-    money: int
+    money: NonNegativeInt
     message: str | None
     created_by: int
 
