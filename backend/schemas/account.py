@@ -1,9 +1,9 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, NonNegativeInt
 
 
 class AccountBase(BaseModel):
     user_id: int
-    deposit: int
+    deposit: NonNegativeInt
 
 
 class AccountCreate(AccountBase):
@@ -18,6 +18,6 @@ class Account(AccountBase):
 
 class AccountPublic(BaseModel):
     account_number: int
-    deposit: int
+    deposit: NonNegativeInt
 
     model_config = ConfigDict(from_attributes=True)
