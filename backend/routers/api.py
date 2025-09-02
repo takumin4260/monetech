@@ -17,7 +17,8 @@ def get_db():
 
 
 @router.get("/me", response_model=MeResponse)
-def get_me(user_id: int = 1, db: Session = Depends(get_db)):
+def get_me(db: Session = Depends(get_db)):
+    user_id = 1
     user = crud_user.get_user_by_id(db, user_id)
     account = crud_account.get_account_by_user_id(db, user_id)
     return MeResponse(user=user, account=account)
