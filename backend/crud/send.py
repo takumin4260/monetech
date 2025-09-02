@@ -13,7 +13,6 @@ def create_send(db: Session, send: SendCreate) -> Send:
         to_user=send.to_user,
         money=send.money,
         message=send.message,
-        date=send.date,
     )
     db.add(db_send)
     db.commit()
