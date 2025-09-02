@@ -91,7 +91,8 @@ export interface components {
             icon: string;
         };
         Account: {
-            account_number: string;
+            /** @description Account number (integer). */
+            account_number: number;
             /**
              * @description Deposit amount in JPY (integer).
              * @example 10000

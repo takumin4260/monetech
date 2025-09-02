@@ -35,7 +35,7 @@ paths:
                       name: Taro
                       icon: u1.png
                     account:
-                      account_number: "12345678"
+                      account_number: 12345678
                       deposit: 10000
         "401":
           $ref: '#/components/responses/UnauthorizedError'
@@ -90,7 +90,7 @@ paths:
                 example:
                   value:
                     user: { id: 2, name: Hanako, icon: u2.png }
-                    account: { account_number: "98765432" }
+                    account: { account_number: 98765432 }
         "400":
           description: Invalid user id.
           content:
@@ -282,7 +282,8 @@ components:
       required: [account_number, deposit]
       properties:
         account_number:
-          type: string
+          type: integer
+          description: Account number (integer).
         deposit:
           type: integer
           description: Deposit amount in JPY (integer).

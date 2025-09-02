@@ -1,11 +1,14 @@
 import React from 'react';
 import Link from "next/link";
+import { components } from "@/app/gen/schema"; // schema.d.tsのパスを適切に指定
 
+// APIレスポンスの型をインポート
+type MeResponse = components["schemas"]["MeResponse"];
 
-export default function MobileAccountScreen() {
-
-  //ここでapi/getMeをfetchする
-  const loginUser = fetch("api/getMe")
+export default async function MobileAccountScreen() {
+  // ここでapi/getMeをfetchする
+  const response = await fetch("http://localhost:3000/api/getMe");
+  const loginUser = await response.json();
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
@@ -29,7 +32,7 @@ export default function MobileAccountScreen() {
 
         {/* Account Info */}
         <div className="mb-2">
-          <p className="text-sm text-gray-600">口座番号：0000000</p>
+          <p className="text-sm text-gray-600">口座番号：{loginUser.account.accountNumber}</p>
         </div>
         
         <div className="mb-8">
@@ -39,7 +42,7 @@ export default function MobileAccountScreen() {
         {/* Balance Card */}
         <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-800">50,000円</p>
+            <p className="text-2xl font-bold text-gray-800">{loginUser.account.deposit+"円"}</p>
           </div>
         </div>
 
