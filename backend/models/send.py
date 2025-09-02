@@ -10,5 +10,5 @@ class Send(Base):
     from_user = Column(Integer, ForeignKey("users.id"), index=True)
     to_user = Column(Integer, ForeignKey("users.id"), index=True)
     money = Column(Integer, default=0)
-    message = Column(String, default="")
+    message = Column(String, nullable=True)
     date = Column(DateTime(timezone=True), server_default=func.now())

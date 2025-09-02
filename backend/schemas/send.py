@@ -1,12 +1,12 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, NonNegativeInt
 from datetime import datetime
 
 
 class SendBase(BaseModel):
     from_user: int
     to_user: int
-    money: int
-    message: str
+    money: NonNegativeInt
+    message: str | None
     date: datetime
 
 
