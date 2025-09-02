@@ -7,7 +7,6 @@ class SendBase(BaseModel):
     to_user: int
     money: NonNegativeInt
     message: str | None
-    date: datetime
 
 
 class SendCreate(SendBase):
@@ -16,5 +15,6 @@ class SendCreate(SendBase):
 
 class Send(SendBase):
     id: int
+    date: datetime
 
     model_config = ConfigDict(from_attributes=True)
