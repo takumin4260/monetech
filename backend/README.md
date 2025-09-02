@@ -1,5 +1,8 @@
 ## 実行方法
-docker-compose up --build
+`docker-compose up --build`
+
+## データベース破壊
+`docker-compose down -v`
 
 ## 開発環境構築(ローカル)
 uvのインストール

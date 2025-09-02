@@ -21,7 +21,6 @@
 - `icon`: string  // サーバに保存されたアイコンのファイル名
 
 ### Account
-- `id`: int (連番)
 - `user_id`: int
 - `account_number`: string
 - `deposit`: integer  // 整数円
@@ -52,7 +51,6 @@
     "icon": "u1.png"
   },
   "account": {
-    "id": 101,
     "account_number": "12345678",
     "deposit": 10000
   }
@@ -92,7 +90,6 @@
     "icon": "u2.png"
   },
   "account": {
-    "id": 102,
     "account_number": "98765432"
   }
 }
