@@ -11,6 +11,6 @@ class AccountCreate(AccountBase):
 
 
 class Account(AccountBase):
-    id: int
+    account_number: int
 
     model_config = ConfigDict(from_attributes=True)
