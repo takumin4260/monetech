@@ -16,3 +16,6 @@ Windows
 
 各種コマンド実行
 `uv run ○○`
+
+フォーマットコマンド
+`uv run ruff format`
