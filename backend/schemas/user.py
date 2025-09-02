@@ -16,3 +16,11 @@ class User(UserBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserPublic(BaseModel):
+    id: int
+    name: str
+    icon: str
+
+    model_config = ConfigDict(from_attributes=True)
