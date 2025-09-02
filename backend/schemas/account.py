@@ -14,3 +14,10 @@ class Account(AccountBase):
     account_number: int
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class AccountPublic(BaseModel):
+    account_number: int
+    deposit: int
+
+    model_config = ConfigDict(from_attributes=True)
