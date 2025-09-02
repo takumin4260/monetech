@@ -1,8 +1,11 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class UserBase(BaseModel):
     name: str
+    icon: str
+    email: EmailStr
+    password: str
 
 
 class UserCreate(UserBase):
