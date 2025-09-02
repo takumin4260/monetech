@@ -24,10 +24,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* 共通ヘッダー（上部に固定） */}
+        <header className="fixed top-0 left-1/2 -translate-x-1/2 w-[400px] bg-gray-100 border-b border-gray-300 py-4 text-center z-50">
+          <h1 className="text-lg font-bold text-gray-800">送金アプリ</h1>
+        </header>
+        
+        {/* ページの中身（ヘッダー分の余白を追加） */}
+        <main className="pt-14">{children}</main>
       </body>
     </html>
   );
