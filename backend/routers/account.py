@@ -25,7 +25,7 @@ def create_account(account: AccountCreate, db: Session = Depends(get_db)):
 
 @router.get("/{account_number}", response_model=Account)
 def read_account(account_number: int, db: Session = Depends(get_db)):
-    db_account = crud_account.get_account_by_account_number(db, account_number=account_number)
+    db_account = crud_account.get_account(db, account_number=account_number)
     if db_account is None:
         raise HTTPException(status_code=404, detail="Account not found")
     return db_account
