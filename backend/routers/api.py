@@ -5,7 +5,7 @@ from schemas.api import MeResponse
 from crud import user as crud_user
 from crud import account as crud_account
 
-router = APIRouter(prefix="/api", tags=["api"])
+router = APIRouter(tags=["api"])
 
 
 def get_db():
