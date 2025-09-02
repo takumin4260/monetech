@@ -1,9 +1,12 @@
 import React from 'react';
-import Link from "next/link"; 
-import Image from "next/image";
+import Link from "next/link";
 
 
 export default function MobileAccountScreen() {
+
+  //ここでapi/getMeをfetchする
+  const loginUser = fetch("api/getMe")
+
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
       {/* Main Content */}
@@ -20,7 +23,7 @@ export default function MobileAccountScreen() {
           
           {/* Name */}
           <div>
-            <h2 className="text-lg font-medium text-gray-800">サンプル 氏名</h2>
+            <h2 className="text-lg font-medium text-gray-800">{loginUser.user.name}</h2>
           </div>
         </div>
 
