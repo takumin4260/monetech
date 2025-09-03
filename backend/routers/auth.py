@@ -4,17 +4,9 @@ from sqlalchemy.orm import Session
 from schemas.user import UserPublic
 from schemas.auth import AuthLogin
 from crud import user as crud_user
-from database import SessionLocal
+from database import get_db
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/login", response_model=UserPublic)
