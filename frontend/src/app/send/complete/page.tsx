@@ -29,7 +29,7 @@ export default function CompletionPage() {
         <h1 className="text-xl font-medium text-gray-700">送金処理が完了しました</h1>
 
         {/* トップ画面に戻るボタン */}
-        <Link href="/" passHref>
+        <Link href="/home" passHref>
           <button className="mt-8 px-6 py-3 bg-white text-gray-800 font-bold rounded-full border border-gray-300 shadow-md hover:bg-gray-100 transition duration-300 ease-in-out">
             トップ画面に戻る
           </button>
