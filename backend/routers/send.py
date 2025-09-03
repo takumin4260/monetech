@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from schemas.send import Send, SendCreate
 from crud import send as crud_send
 
@@ -8,14 +8,6 @@ router = APIRouter(
     prefix="/sends",
     tags=["sends"],
 )
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/", response_model=Send)
