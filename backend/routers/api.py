@@ -1,11 +1,13 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from models.user import User
 from utils.auth import get_current_user
-from schemas.api import MeResponse, UserResponse
+from schemas.send import SendCreate
+from schemas.api import MeResponse, UserResponse, TransfersRequest, TransfersResponse
 from crud import user as crud_user
 from crud import account as crud_account
+from crud import send as crud_send
 
 router = APIRouter(tags=["api"])
 
@@ -23,3 +25,59 @@ def get_me(
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = crud_user.get_user_by_id(db, user_id)
     return UserResponse(user=user)
+
+
+@router.post("/transfers", response_model=TransfersResponse)
+def transfers(
+    transfer: TransfersRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if transfer.money <= 0:
+        raise HTTPException(status_code=400, detail="INVALID_AMOUNT")
+
+    from_account = crud_account.get_account_by_user_id(db, current_user.id)
+    if from_account is None:
+        raise HTTPException(status_code=404, detail="USER_NOT_FOUND")
+
+    to_account = crud_account.get_account_by_user_id(db, transfer.to_user_id)
+    if to_account is None:
+        raise HTTPException(status_code=404, detail="USER_NOT_FOUND")
+
+    if from_account.deposit - transfer.money < 0:
+        raise HTTPException(status_code=400, detail="INSUFFICIENT_FUNDS")
+
+    try:
+        from_account.deposit -= transfer.money
+        db.add(from_account)
+
+        to_account.deposit += transfer.money
+        db.add(to_account)
+
+        db.commit()
+
+        db.refresh(from_account)
+        db.refresh(to_account)
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="TRANSFER_FAILED")
+
+    db_send = crud_send.create_send(
+        db,
+        SendCreate(
+            from_user=current_user.id,
+            to_user=transfer.to_user_id,
+            money=transfer.money,
+            message=transfer.message,
+        ),
+    )
+
+    return TransfersResponse(
+        id=db_send.id,
+        from_user_id=db_send.from_user,
+        to_user_id=db_send.to_user,
+        money=db_send.money,
+        message=db_send.message,
+        date=db_send.date,
+        completed=True,
+    )
