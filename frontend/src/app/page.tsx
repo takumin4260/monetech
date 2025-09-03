@@ -1,7 +1,6 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { postLogin } from '@/app/lib/client/postLogin';
 
 export default function MobileLoginScreen() {
   const router = useRouter();
@@ -23,16 +22,43 @@ export default function MobileLoginScreen() {
 
     setSubmitting(true);
     setError(null);
-    try {
-      await postLogin(email, password);
-      // 成功時はホームへ
-      router.push('/home');
-    } catch (err: any) {
-      setError(err?.message ?? 'ログインに失敗しました。しばらくしてから再度お試しください。');
-    } finally {
+
+    await fetch("http://localhost:8000/auth/login", {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((reason) => {
+      console.log(reason)
+    }).then((res) => {
+      if (res && res.ok) {
+        router.push('/home');
+      } else {
+        setError('ログインに失敗しました。しばらくしてから再度お試しください。');
+      }
       setSubmitting(false);
-    }
+    });
   };
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/me", {
+          credentials: "include",
+        })
+
+        if (res.ok) {
+          router.push("/home");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    checkLoginStatus();
+  }, [router]);
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
