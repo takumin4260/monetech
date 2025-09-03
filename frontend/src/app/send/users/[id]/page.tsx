@@ -4,10 +4,13 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { getUser } from '@/app/lib/client/getUser';
 
-export default async function MobileAccountScreen( params: { id: string }) {
+export default async function MobileAccountScreen({ params }: { params: { id: string } }) {
   const { id } = params; // URLからidを取得
   console.log(params)
-  //const user = await getUser(id); // getUser関数にidを渡す
+  console.log(id)
+  const user = await getUser(id); // getUser関数にidを渡す
+
+  console.log(user)
 
   const [transferAmount, setTransferAmount] = useState<string>(''); // 空文字で初期化
   const maxNum = 10000 //@Todo ユーザーの口座金額に変更する
