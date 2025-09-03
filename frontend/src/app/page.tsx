@@ -6,6 +6,12 @@ export default function MobileLoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+    // メールアドレス形式チェック
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+  const showEmailError = email && !isValidEmail(email);
+
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
       {/* Main Content */}
@@ -32,6 +38,9 @@ export default function MobileLoginScreen() {
                 className="w-full px-3 py-3 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="example@email.com"
               />
+              {showEmailError && (
+                <p className="text-red-500 text-sm mt-1">メールアドレスの型が正しくありません</p>
+              )}
             </div>
 
             {/* Password Input */}
@@ -52,9 +61,9 @@ export default function MobileLoginScreen() {
             {/* Login Button */}
             <Link href="/home">
               <button 
-                disabled={!email || !password}
+                disabled={!email || !password || !!showEmailError}
                 className={`w-full py-3 rounded-lg transition font-medium ${
-                  !email || !password 
+                  !email || !password || !!showEmailError
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
                     : 'bg-blue-500 text-white hover:bg-blue-600'
                 }`}

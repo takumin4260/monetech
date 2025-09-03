@@ -5,8 +5,9 @@ import Link from 'next/link';
 
 export default function MobileAccountScreen() {
   const [transferAmount, setTransferAmount] = useState<string>(''); // 空文字で初期化
-  const [message, setMessage] = useState<string>(''); // メッセージ用のstateを追加
   const maxNum = 10000 //@Todo ユーザーの口座金額に変更する
+  const showAmountError = transferAmount && Number(transferAmount) > maxNum;
+  const [message, setMessage] = useState<string>(''); // メッセージ用のstateを追加
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
@@ -51,7 +52,7 @@ export default function MobileAccountScreen() {
         </div>
 
         {/* 入力フォームのコンテナ */}
-        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <div className="flex items-center justify-center">
             <input
               type="number" // 数字入力用のキーボードを表示
@@ -62,6 +63,12 @@ export default function MobileAccountScreen() {
             />
             <span className="text-2xl font-bold text-gray-800 ml-2">円</span>
           </div>
+        </div>
+
+        <div className="h-8 mt-2 mb-6 flex items-center justify-center">
+          {showAmountError && (
+            <p className="text-red-500 text-sm text-center">口座残高より大きな金額は送金できません</p>
+          )}
         </div>
 
         {/* メッセージ(任意) */}
