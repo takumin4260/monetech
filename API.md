@@ -109,7 +109,7 @@
 ```
 {
   "to_user_id": 2,
-  "amount": 5000,
+  "money": 5000,
   "message": "ランチ代ありがとう！"
 }
 ```
@@ -120,7 +120,7 @@
   "id": 1001,
   "from_user_id": 1,
   "to_user_id": 2,
-  "amount": 5000,
+  "money": 5000,
   "message": "ランチ代ありがとう！",
   "date": "2025-09-01T10:00:00Z",
   "completed": true
