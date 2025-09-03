@@ -12,7 +12,7 @@ class MeResponse(BaseModel):
 class UsersResponse(BaseModel):
     users: list[UserPublic]
 
- 
+
 class UserResponse(BaseModel):
     user: UserPublic
     account: AccountNum
@@ -25,10 +25,4 @@ class TransfersRequest(BaseModel):
 
 
 class TransfersResponse(BaseModel):
-    id: int
-    from_user_id: int
-    to_user_id: int
-    money: NonNegativeInt
-    message: str | None
-    date: datetime
     completed: bool

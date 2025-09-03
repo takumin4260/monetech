@@ -23,8 +23,10 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.refresh(db_user)
     return db_user
 
+
 def get_all_users(db: Session) -> list[User]:
     return db.query(User).all()
+
 
 def authenticate_user(db: Session, email: str, password: str):
     user = get_user_by_email(db, email)

@@ -22,6 +22,7 @@ class AccountPublic(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class AccountNum(BaseModel):
     account_number: int
 
