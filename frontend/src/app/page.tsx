@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { postLogin } from '@/app/lib/client/postLogin';
 
 export default function MobileLoginScreen() {
   const router = useRouter();
