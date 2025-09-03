@@ -16,7 +16,7 @@ export async function GET() {
         },
         account:{
             deposit:3000,
-            accountNumber:1
+            account_number:1
         }
     }
     return NextResponse.json(data)

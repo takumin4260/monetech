@@ -1,7 +1,15 @@
 import React from 'react';
 import Link from "next/link";
+import { components } from "@/app/gen/schema"; // schema.d.tsのパスを適切に指定
+import { getMe } from './lib/client/getMe';
+
+// APIレスポンスの型をインポート
+type MeResponse = components["schemas"]["MeResponse"];
 
 export default function MobileLoginScreen() {
+export default async function MobileAccountScreen() {
+  // ここでapi/getMeをfetchする
+  const loginUser = await getMe();
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
