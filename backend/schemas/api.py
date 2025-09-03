@@ -7,6 +7,8 @@ class MeResponse(BaseModel):
     user: UserPublic
     account: AccountPublic
 
+class UsersResponse(BaseModel):
+    users: list[UserPublic]
 
 class UserResponse(BaseModel):
     user: UserPublic
