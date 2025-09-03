@@ -34,6 +34,23 @@
 - `date`: string (ISO 8601)
 - `completed`: boolean
 
+### Request
+- `id`: UUID
+- `money`: integer
+- `message`: string
+- `created_by`: integer
+- `date`: datetime
+- `completed`: boolean
+
+### Send
+- `id`: integer
+- `from_user`: integer
+- `to_user`: integer
+- `money`: integer
+- `message`: string
+- `date`: datetime
+- `request_id`: UUID | None
+
 ---
 
 ## エンドポイント一覧
@@ -114,7 +131,7 @@
     "icon": "u2.png"
   },
   "account": {
-    "account_number": "98765432"
+    "account_number": 98765432
   }
 }
 ```
@@ -142,3 +159,21 @@
 ```
 
 ---
+
+### 5. 請求作成
+**POST /billing**
+- 請求の作成を行う
+
+**request例**
+```
+{
+  "money": 5000,
+  "message": "5000円お願いします！"
+}
+```
+**response例**
+```
+{
+  "url": localhost:3000/request/UUID
+}
+```
