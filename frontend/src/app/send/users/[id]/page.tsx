@@ -65,7 +65,7 @@ export default function MobileAccountScreen() {
           </div>
         </div>
 
-        <div className="h-8 mt-2 mb-6 flex items-center justify-center">
+        <div className="h-8 mb-8 flex items-center justify-center">
           {showAmountError && (
             <p className="text-red-500 text-sm text-center">口座残高より大きな金額は送金できません</p>
           )}
