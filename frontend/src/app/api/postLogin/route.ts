@@ -15,5 +15,5 @@ export async function POST(req: NextRequest) {
       cache: 'no-store',
     });
     console.log("upstream")
-    const res = NextResponse.json({ ok: true }, { status: 200 });
+    return NextResponse.json({ ok: true }, { status: 200 });
 }
