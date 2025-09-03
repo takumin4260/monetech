@@ -3,18 +3,80 @@ info:
   title: Example Payments API (MVP)
   version: "1.0.0"
   description: |
-    Backend MVP API. All endpoints require Bearer token authentication.
+    Backend MVP API. Uses server-side session (HttpOnly cookie).
     Dates/times use ISO 8601 in UTC.
 servers:
   - url: https://api.example.com/v1
 security:
-  - bearerAuth: []
+  - cookieAuth: []
 tags:
   - name: Auth
-    description: Authentication and user session
+    description: Authentication and session endpoints
   - name: Users
   - name: Transfers
 paths:
+  /login:
+    post:
+      tags: [Auth]
+      summary: Login with email and password
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              example:
+                value:
+                  email: taro@example.com
+                  password: passw0rd
+      responses:
+        "200":
+          description: OK (session created; Set-Cookie returned)
+          headers:
+            Set-Cookie:
+              description: Session cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+              examples:
+                example:
+                  value: { ok: true }
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                INVALID_CREDENTIALS:
+                  value: { error_code: "INVALID_CREDENTIALS", message: "email or password is incorrect" }
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /logout:
+    post:
+      tags: [Auth]
+      summary: Logout and invalidate the session
+      operationId: logout
+      responses:
+        "204":
+          description: No Content (session invalidated)
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                INVALID_CREDENTIALS:
+                  value: { error_code: "INVALID_CREDENTIALS", message: "login required" }
+        default:
+          $ref: '#/components/responses/ErrorResponse'
   /me:
     get:
       tags: [Auth]
@@ -35,7 +97,7 @@ paths:
                       name: Taro
                       icon: u1.png
                     account:
-                      account_number: "12345678"
+                      account_number: 1007
                       deposit: 10000
         "401":
           $ref: '#/components/responses/UnauthorizedError'
@@ -46,8 +108,6 @@ paths:
       tags: [Users]
       summary: List users (recipients)
       operationId: listUsers
-      parameters:
-        - $ref: '#/components/parameters/ExcludeParam'
       responses:
         "200":
           description: OK
@@ -90,7 +150,7 @@ paths:
                 example:
                   value:
                     user: { id: 2, name: Hanako, icon: u2.png }
-                    account: { account_number: "98765432" }
+                    account: { account_number: 98765432 }
         "400":
           description: Invalid user id.
           content:
@@ -114,37 +174,10 @@ paths:
         default:
           $ref: '#/components/responses/ErrorResponse'
   /transfers:
-    get:
-      tags: [Transfers]
-      summary: List transfer history (optional)
-      operationId: listTransfers
-      parameters:
-        - $ref: '#/components/parameters/DirectionParam'
-        - $ref: '#/components/parameters/LimitParam'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Transfer'
-        "401":
-          $ref: '#/components/responses/UnauthorizedError'
-        default:
-          $ref: '#/components/responses/ErrorResponse'
     post:
       tags: [Transfers]
       summary: Create a transfer
       operationId: createTransfer
-      parameters:
-        - name: Idempotency-Key
-          in: header
-          required: false
-          description: Recommended to ensure idempotent POST /transfers. Use a UUID.
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -158,86 +191,43 @@ paths:
                   amount: 5000
                   message: "ランチ代ありがとう！"
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transfer'
+                $ref: '#/components/schemas/CompletedResponse'
               examples:
                 example:
-                  value:
-                    id: 1001
-                    from_user_id: 1
-                    to_user_id: 2
-                    amount: 5000
-                    message: "ランチ代ありがとう！"
-                    date: "2025-09-01T10:00:00Z"
-                    completed: true
+                  value: { is_completed: true }
         "400":
           description: Invalid request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-              examples:
-                INVALID_AMOUNT:
-                  value: { error_code: "INVALID_AMOUNT", message: "Amount must be a positive integer" }
         "404":
           description: User not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-              examples:
-                USER_NOT_FOUND:
-                  value: { error_code: "USER_NOT_FOUND", message: "Recipient user not found" }
         "409":
           description: Insufficient funds
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-              examples:
-                INSUFFICIENT_FUNDS:
-                  value: { error_code: "INSUFFICIENT_FUNDS", message: "Insufficient balance" }
         "401":
           $ref: '#/components/responses/UnauthorizedError'
         default:
           $ref: '#/components/responses/ErrorResponse'
 components:
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-  parameters:
-    ExcludeParam:
-      name: exclude
-      in: query
-      required: false
-      description: Exclude self from results by passing `exclude=self`.
-      schema:
-        type: string
-        enum: [self]
-    DirectionParam:
-      name: direction
-      in: query
-      required: false
-      description: Filter by direction.
-      schema:
-        type: string
-        enum: [sent, received]
-    LimitParam:
-      name: limit
-      in: query
-      required: false
-      description: Max number of items to return.
-      schema:
-        type: integer
-        default: 20
-        minimum: 1
-        maximum: 100
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
   responses:
     UnauthorizedError:
       description: Unauthorized
@@ -247,7 +237,7 @@ components:
             $ref: '#/components/schemas/Error'
           examples:
             UNAUTHORIZED:
-              value: { error_code: "UNAUTHORIZED", message: "Missing or invalid token" }
+              value: { error_code: "UNAUTHORIZED", message: "login required" }
     ErrorResponse:
       description: Error
       content:
@@ -255,6 +245,18 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    OkResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+      required: [ok]
+    CompletedResponse:
+      type: object
+      properties:
+        completed:
+          type: boolean
+      required: [completed]
     Error:
       type: object
       required: [error_code, message]
@@ -265,6 +267,16 @@ components:
         message:
           type: string
           description: Human-readable error message.
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
     User:
       type: object
       required: [id, name, icon]
@@ -282,7 +294,8 @@ components:
       required: [account_number, deposit]
       properties:
         account_number:
-          type: string
+          type: integer
+          format: int32
         deposit:
           type: integer
           description: Deposit amount in JPY (integer).
@@ -292,7 +305,8 @@ components:
       required: [account_number]
       properties:
         account_number:
-          type: string
+          type: integer
+          format: int32
     Transfer:
       type: object
       required: [id, from_user_id, to_user_id, amount, date, completed]
