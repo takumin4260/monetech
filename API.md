@@ -167,7 +167,6 @@
 **request例**
 ```
 {
-  "to_user_id": 2,
   "money": 5000,
   "message": "5000円お願いします！"
 }
