@@ -20,7 +20,7 @@ def get_db():
 @router.post("/login", response_model=UserPublic)
 def login(request: Request, form_data: AuthLogin, db: Session = Depends(get_db)):
     user = crud_user.authenticate_user(db, form_data.email, form_data.password)
-    if not user:
+    if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",

@@ -12,7 +12,7 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
         status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
     )
 
-    if not user_id:
+    if user_id is None:
         raise credentials_exception
 
     user = get_user_by_id(db, user_id)
