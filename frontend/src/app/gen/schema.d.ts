@@ -4,6 +4,40 @@
  */
 
 export interface paths {
+    "/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login with email and password */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Logout and invalidate the session */
+        post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/me": {
         parameters: {
             query?: never;
@@ -62,8 +96,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List transfer history (optional) */
-        get: operations["listTransfers"];
+        get?: never;
         put?: never;
         /** Create a transfer */
         post: operations["createTransfer"];
@@ -77,11 +110,23 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        OkResponse: {
+            ok: boolean;
+        };
+        CompletedResponse: {
+            completed: boolean;
+        };
         Error: {
             /** @description Machine-readable error code. */
             error_code: string;
             /** @description Human-readable error message. */
             message: string;
+        };
+        LoginRequest: {
+            /** Format: email */
+            email: string;
+            /** Format: password */
+            password: string;
         };
         User: {
             /** Format: int32 */
@@ -91,7 +136,7 @@ export interface components {
             icon: string;
         };
         Account: {
-            /** @description Account number (integer). */
+            /** Format: int32 */
             account_number: number;
             /**
              * @description Deposit amount in JPY (integer).
@@ -100,7 +145,8 @@ export interface components {
             deposit: number;
         };
         AccountPublic: {
-            account_number: string;
+            /** Format: int32 */
+            account_number: number;
         };
         Transfer: {
             /** Format: int32 */
@@ -155,20 +201,77 @@ export interface components {
             };
         };
     };
-    parameters: {
-        /** @description Exclude self from results by passing `exclude=self`. */
-        ExcludeParam: "self";
-        /** @description Filter by direction. */
-        DirectionParam: "sent" | "received";
-        /** @description Max number of items to return. */
-        LimitParam: number;
-    };
+    parameters: never;
     requestBodies: never;
     headers: never;
     pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description OK (session created; Set-Cookie returned) */
+            200: {
+                headers: {
+                    /** @description Session cookie */
+                    "Set-Cookie"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkResponse"];
+                };
+            };
+            /** @description Invalid credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            default: components["responses"]["ErrorResponse"];
+        };
+    };
+    logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content (session invalidated) */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            default: components["responses"]["ErrorResponse"];
+        };
+    };
     getMe: {
         parameters: {
             query?: never;
@@ -193,10 +296,7 @@ export interface operations {
     };
     listUsers: {
         parameters: {
-            query?: {
-                /** @description Exclude self from results by passing `exclude=self`. */
-                exclude?: components["parameters"]["ExcludeParam"];
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -259,40 +359,10 @@ export interface operations {
             default: components["responses"]["ErrorResponse"];
         };
     };
-    listTransfers: {
-        parameters: {
-            query?: {
-                /** @description Filter by direction. */
-                direction?: components["parameters"]["DirectionParam"];
-                /** @description Max number of items to return. */
-                limit?: components["parameters"]["LimitParam"];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Transfer"][];
-                };
-            };
-            401: components["responses"]["UnauthorizedError"];
-            default: components["responses"]["ErrorResponse"];
-        };
-    };
     createTransfer: {
         parameters: {
             query?: never;
-            header?: {
-                /** @description Recommended to ensure idempotent POST /transfers. Use a UUID. */
-                "Idempotency-Key"?: string;
-            };
+            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -302,13 +372,13 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Created */
-            201: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Transfer"];
+                    "application/json": components["schemas"]["CompletedResponse"];
                 };
             };
             /** @description Invalid request */

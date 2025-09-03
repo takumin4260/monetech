@@ -10,8 +10,10 @@ export default async function MobileAccountScreen( params: { id: string }) {
   //const user = await getUser(id); // getUser関数にidを渡す
 
   const [transferAmount, setTransferAmount] = useState<string>(''); // 空文字で初期化
+  const maxNum = 10000 //@Todo ユーザーの口座金額に変更する
+  const showAmountError = transferAmount && Number(transferAmount) > maxNum;
   const [message, setMessage] = useState<string>(''); // メッセージ用のstateを追加
-  
+
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
       {/* Main Content */}
@@ -55,7 +57,7 @@ export default async function MobileAccountScreen( params: { id: string }) {
         </div>
 
         {/* 入力フォームのコンテナ */}
-        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 mb-8">
+        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <div className="flex items-center justify-center">
             <input
               type="number" // 数字入力用のキーボードを表示
@@ -66,6 +68,12 @@ export default async function MobileAccountScreen( params: { id: string }) {
             />
             <span className="text-2xl font-bold text-gray-800 ml-2">円</span>
           </div>
+        </div>
+
+        <div className="h-8 mb-8 flex items-center justify-center">
+          {showAmountError && (
+            <p className="text-red-500 text-sm text-center">口座残高より大きな金額は送金できません</p>
+          )}
         </div>
 
         {/* メッセージ(任意) */}
@@ -84,7 +92,14 @@ export default async function MobileAccountScreen( params: { id: string }) {
         {/* 送金ボタン */}
         <div className="flex justify-center mt-8">
           <Link href="../complete">
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
+            <button 
+              disabled={!transferAmount || Number(transferAmount) > maxNum}
+              className={`w-full font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out ${
+                !transferAmount || Number(transferAmount) > maxNum
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-blue-500 hover:bg-blue-600 text-white'
+              }`}
+            >
               送金
             </button>
           </Link>

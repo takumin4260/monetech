@@ -1,22 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from schemas.request import Request, RequestCreate
 from crud import request as crud_request
 from uuid import UUID
 
 router = APIRouter(
-    prefix="/requests",
+    prefix="/debug/requests",
     tags=["requests"],
 )
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/", response_model=Request)

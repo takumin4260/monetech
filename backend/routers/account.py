@@ -1,21 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from schemas.account import Account, AccountCreate
 from crud import account as crud_account
 
 router = APIRouter(
-    prefix="/accounts",
+    prefix="/debug/accounts",
     tags=["accounts"],
 )
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/", response_model=Account)
