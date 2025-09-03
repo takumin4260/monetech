@@ -7,5 +7,6 @@ class MeResponse(BaseModel):
     user: UserPublic
     account: AccountPublic
 
+
 class UserResponse(BaseModel):
     user: UserPublic
