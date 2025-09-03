@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from schemas.user import User, UserCreate
 from crud import user as crud_user
 
@@ -8,14 +8,6 @@ router = APIRouter(
     prefix="/debug/users",
     tags=["users"],
 )
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/", response_model=User)
