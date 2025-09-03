@@ -26,6 +26,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     return UserResponse(user=user, account=account)
 
 @router.get("/users", response_model=UsersResponse)
-def get_users(db: Session = Depends(get_db)):
+def get_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     users = crud_user.get_all_users(db)
+    users.remove(current_user)
     return UsersResponse(users=users)
