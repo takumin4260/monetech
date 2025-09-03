@@ -23,15 +23,24 @@ export default function MobileLoginScreen() {
 
     setSubmitting(true);
     setError(null);
-    try {
-      await postLogin(email, password);
-      // 成功時はホームへ
-      router.push('/home');
-    } catch (err: any) {
-      setError(err?.message ?? 'ログインに失敗しました。しばらくしてから再度お試しください。');
-    } finally {
+
+    await fetch("http://localhost:8000/auth/login", {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((reason) => {
+      console.log(reason)
+    }).then((res) => {
+      if (res && res.ok) {
+        router.push('/home');
+      } else {
+        setError('ログインに失敗しました。しばらくしてから再度お試しください。');
+      }
       setSubmitting(false);
-    }
+    });
   };
 
   return (
