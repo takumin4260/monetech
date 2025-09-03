@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Uuid
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Uuid, Boolean
 from sqlalchemy.sql import func
 from database import Base
 
@@ -13,3 +13,4 @@ class Request(Base):
     message = Column(String, nullable=True)
     created_by = Column(Integer, ForeignKey("users.id"), index=True)
     date = Column(DateTime(timezone=True), server_default=func.now())
+    completed = Column(Boolean, default=False)
