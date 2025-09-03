@@ -2,8 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { getUser } from '@/app/lib/client/getUser';
 
-export default function MobileAccountScreen() {
+export default async function MobileAccountScreen( params: { id: string }) {
+  const { id } = params; // URLからidを取得
+  console.log(params)
+  //const user = await getUser(id); // getUser関数にidを渡す
+
   const [transferAmount, setTransferAmount] = useState<string>(''); // 空文字で初期化
   const [message, setMessage] = useState<string>(''); // メッセージ用のstateを追加
   

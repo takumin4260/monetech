@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from "next/link"; 
-import Image from "next/image";
+import { getMe } from '@/app/lib/client/getMe';
 
+export default async function MobileAccountScreen() {
+  const loginUser = await getMe();
 
-export default function MobileAccountScreen() {
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
       {/* Main Content */}
@@ -20,13 +21,13 @@ export default function MobileAccountScreen() {
           
           {/* Name */}
           <div>
-            <h2 className="text-lg font-medium text-gray-800">サンプル 氏名</h2>
+            <h2 className="text-lg font-medium text-gray-800">{loginUser.user.name}</h2>
           </div>
         </div>
 
         {/* Account Info */}
         <div className="mb-2">
-          <p className="text-sm text-gray-600">口座番号：0000000</p>
+          <p className="text-sm text-gray-600">口座番号：{loginUser.account.account_number}</p>
         </div>
         
         <div className="mb-8">
@@ -36,7 +37,7 @@ export default function MobileAccountScreen() {
         {/* Balance Card */}
         <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-800">50,000円</p>
+            <p className="text-2xl font-bold text-gray-800">{loginUser.account.deposit+"円"}</p>
           </div>
         </div>
 
