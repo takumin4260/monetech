@@ -11,12 +11,12 @@ router = APIRouter(
 
 
 @router.post("/", response_model=Send)
-def create_send(send: SendCreate, db: Session = Depends(get_db)):
+def create_send(send: SendCreate, db: Session = Depends(get_db)) -> Send:
     return crud_send.create_send(db=db, send=send)
 
 
 @router.get("/{send_id}", response_model=Send)
-def read_send(send_id: int, db: Session = Depends(get_db)):
+def read_send(send_id: int, db: Session = Depends(get_db)) -> Send:
     db_send = crud_send.get_send_by_id(db, send_id=send_id)
     if db_send is None:
         raise HTTPException(status_code=404, detail="Send not found")
@@ -24,7 +24,7 @@ def read_send(send_id: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/{send_id}")
-def delete_send(send_id: int, db: Session = Depends(get_db)):
+def delete_send(send_id: int, db: Session = Depends(get_db)) -> None | Response:
     success = crud_send.delete_send(db, send_id)
     if not success:
         raise HTTPException(status_code=404, detail="Send not found")

@@ -4,7 +4,7 @@ from schemas.request import RequestCreate
 from uuid import UUID
 
 
-def get_request_by_id(db: Session, request_id: UUID):
+def get_request_by_id(db: Session, request_id: UUID) -> Request | None:
     return db.query(Request).filter(Request.id == request_id).first()
 
 

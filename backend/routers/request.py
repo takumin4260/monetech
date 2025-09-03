@@ -12,13 +12,13 @@ router = APIRouter(
 
 
 @router.post("/", response_model=Request)
-def create_request(request: RequestCreate, db: Session = Depends(get_db)):
+def create_request(request: RequestCreate, db: Session = Depends(get_db)) -> Request:
     # 後でcreated_byをlogin_userに置き換える
     return crud_request.create_request(db=db, request=request)
 
 
 @router.get("/{request_id}", response_model=Request)
-def read_request(request_id: UUID, db: Session = Depends(get_db)):
+def read_request(request_id: UUID, db: Session = Depends(get_db)) -> Request:
     db_request = crud_request.get_request_by_id(db, request_id=request_id)
     if db_request is None:
         raise HTTPException(status_code=404, detail="Request not found")

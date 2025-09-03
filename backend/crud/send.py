@@ -3,7 +3,7 @@ from models.send import Send
 from schemas.send import SendCreate
 
 
-def get_send_by_id(db: Session, send_id: int):
+def get_send_by_id(db: Session, send_id: int) -> Send | None:
     return db.query(Send).filter(Send.id == send_id).first()
 
 
