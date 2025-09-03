@@ -97,7 +97,7 @@ paths:
                       name: Taro
                       icon: u1.png
                     account:
-                      account_number: 1007
+                      account_number: 12345678
                       deposit: 10000
         "401":
           $ref: '#/components/responses/UnauthorizedError'
@@ -295,7 +295,7 @@ components:
       properties:
         account_number:
           type: integer
-          format: int32
+          description: Account number (integer).
         deposit:
           type: integer
           description: Deposit amount in JPY (integer).
