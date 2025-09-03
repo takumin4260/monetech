@@ -6,3 +6,6 @@ from schemas.account import AccountPublic
 class MeResponse(BaseModel):
     user: UserPublic
     account: AccountPublic
+
+class UsersResponse(BaseModel):
+    users: list[UserPublic]
