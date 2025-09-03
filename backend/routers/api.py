@@ -4,7 +4,7 @@ from database import get_db
 from models.user import User
 from utils.auth import get_current_user
 from schemas.send import SendCreate
-from schemas.api import MeResponse, UserResponse, TransfersRequest, TransfersResponse
+from schemas.api import MeResponse, UserResponse, TransfersRequest, TransfersResponse, UsersResponse
 from crud import user as crud_user
 from crud import account as crud_account
 from crud import send as crud_send
@@ -24,7 +24,8 @@ def get_me(
 @router.get("/users/{user_id}", response_model=UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = crud_user.get_user_by_id(db, user_id)
-    return UserResponse(user=user)
+    account = crud_account.get_account_by_user_id(db, user_id)
+    return UserResponse(user=user, account=account)
 
 
 @router.post("/transfers", response_model=TransfersResponse)
@@ -81,3 +82,10 @@ def transfers(
         date=db_send.date,
         completed=True,
     )
+
+
+@router.get("/users", response_model=UsersResponse)
+def get_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    users = crud_user.get_all_users(db)
+    users.remove(current_user)
+    return UsersResponse(users=users)

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, NonNegativeInt
 from schemas.user import UserPublic
-from schemas.account import AccountPublic
+from schemas.account import AccountPublic, AccountNum
 from datetime import datetime
 
 
@@ -9,8 +9,13 @@ class MeResponse(BaseModel):
     account: AccountPublic
 
 
+class UsersResponse(BaseModel):
+    users: list[UserPublic]
+
+ 
 class UserResponse(BaseModel):
     user: UserPublic
+    account: AccountNum
 
 
 class TransfersRequest(BaseModel):

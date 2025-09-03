@@ -1,12 +1,10 @@
 # API Schema（Backend, MVP）
 
 ## 共通仕様
-- **Base URL**: `https://api.example.com/v1`  
-- **認証**: `Authorization: Bearer <token>`（全エンドポイント必須）  
+- **Base URL**: `http://localhost:8000`  
+- **認証**: サーバーサイドsessionを使用
 - **ヘッダ**
   - `Content-Type: application/json`
-  - `Idempotency-Key: <uuid>`（`POST /transfers` のみ推奨）
-- **日時フォーマット**: ISO 8601, UTC
 - **エラーフォーマット（共通）**
   - `error_code`: string
   - `message`: string
@@ -18,11 +16,13 @@
 ### User
 - `id`: int (連番)
 - `name`: string
-- `icon`: string  // サーバに保存されたアイコンのファイル名
+- `icon`: string
+- `email`: string
+- `password`: string
 
 ### Account
 - `user_id`: int
-- `account_number`: string
+- `account_number`: int(連番)
 - `deposit`: integer  // 整数円
 
 ### Transfer
@@ -37,6 +37,34 @@
 ---
 
 ## エンドポイント一覧
+### ログイン
+**POST /login**（認証不要）  
+- 入力: `email`, `password`（JSON）
+- 成功時: セッション発行
+- レスポンス: `200 OK` `{ "ok": true }`
+- エラー: `401 Unauthorized`（`INVALID_CREDENTIALS`）
+
+**request例**
+```json
+{
+  "email": "taro@example.com",
+  "password": "passw0rd"
+}
+```
+
+**response例**
+```json
+{ "ok": true }
+```
+
+### ログアウト
+**POST /logout**（認証必須）  
+- 入力: なし
+- 成功時: セッション無効化
+- レスポンス: `204 No Content`
+- エラー: `401 Unauthorized`（`INVALID_CREDENTIALS`）
+
+
 
 ### 1. ログイン中ユーザ情報取得
 **GET /me**  
@@ -51,7 +79,7 @@
     "icon": "u1.png"
   },
   "account": {
-    "account_number": "12345678",
+    "account_number": 1007,
     "deposit": 10000
   }
 }
@@ -60,8 +88,7 @@
 
 ### 2. ユーザ一覧取得（送金相手）
 **GET /users**  
-- 送金相手候補（自分以外のユーザ）を返す  
-- クエリ: `exclude=self` （自分を除外する）
+- 送金相手候補（自分以外のユーザ）を返す
 
 **response例**
 ```
@@ -75,10 +102,7 @@
 
 ### 3. 宛先ユーザ詳細取得
 **GET /users/{user_id}**  
-- 送金画面で宛先情報を表示するために利用  
-- エラー:  
-  - `USER_NOT_FOUND`  
-  - `INVALID_USER_ID`
+- 送金画面で宛先情報を表示するために利用
 
 
 **response例**
@@ -99,11 +123,7 @@
 
 ### 4. 送金実行
 **POST /transfers**  
-- 宛先ユーザと金額、任意メッセージを指定して送金を行う  
-- エラー:  
-  - `INSUFFICIENT_FUNDS`  
-  - `INVALID_AMOUNT`  
-  - `USER_NOT_FOUND`
+- 宛先ユーザと金額、任意メッセージを指定して送金を行う
 
 **request例**
 ```
@@ -128,7 +148,3 @@
 ```
 
 ---
-
-### 5. 送金履歴取得（オプション）
-**GET /transfers?direction=sent|received&limit=20**  
-- 過去の送金履歴を取得（MVPではUI不要、内部利用想定）
