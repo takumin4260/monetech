@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import SessionLocal
-from schemas.api import MeResponse
+from schemas.api import MeResponse, UserResponse
 from crud import user as crud_user
 from crud import account as crud_account
 
@@ -22,3 +22,8 @@ def get_me(db: Session = Depends(get_db)):
     user = crud_user.get_user_by_id(db, user_id)
     account = crud_account.get_account_by_user_id(db, user_id)
     return MeResponse(user=user, account=account)
+
+@router.get("/users/{user_id}", response_model=UserResponse)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = crud_user.get_user_by_id(db, user_id)
+    return UserResponse(user=user)
