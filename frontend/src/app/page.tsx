@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function MobileLoginScreen() {
@@ -9,6 +9,8 @@ export default function MobileLoginScreen() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [hoge, setHoge] = useState<any>(null);
 
   // メールアドレス形式チェック
   const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -41,6 +43,14 @@ export default function MobileLoginScreen() {
       setSubmitting(false);
     });
   };
+
+  useEffect(() => {
+    fetch("http://localhost:8000/me", {
+      credentials: "include",
+    }).then((res) => {
+      setHoge(res);
+    });
+  }, [hoge]);
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
