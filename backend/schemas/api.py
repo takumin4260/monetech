@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from schemas.user import UserPublic
-from schemas.account import AccountPublic
+from schemas.account import AccountPublic, AccountNum
 
 
 class MeResponse(BaseModel):
@@ -9,3 +9,7 @@ class MeResponse(BaseModel):
 
 class UsersResponse(BaseModel):
     users: list[UserPublic]
+
+class UserResponse(BaseModel):
+    user: UserPublic
+    account: AccountNum
