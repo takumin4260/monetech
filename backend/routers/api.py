@@ -4,16 +4,20 @@ from database import get_db
 from models.user import User
 from utils.auth import get_current_user
 from schemas.send import SendCreate
+from schemas.request import RequestCreate
 from schemas.api import (
     MeResponse,
     UserResponse,
     TransfersRequest,
     TransfersResponse,
     UsersResponse,
+    BillingRequest,
+    BillingResponse,
 )
 from crud import user as crud_user
 from crud import account as crud_account
 from crud import send as crud_send
+from crud import request as crud_request
 
 router = APIRouter(tags=["api"])
 
@@ -69,7 +73,7 @@ def transfers(
         db.rollback()
         raise HTTPException(status_code=500, detail="TRANSFER_FAILED")
 
-    db_send = crud_send.create_send(
+    crud_send.create_send(
         db,
         SendCreate(
             from_user=current_user.id,
@@ -91,3 +95,25 @@ def get_users(
     users = crud_user.get_all_users(db)
     users.remove(current_user)
     return UsersResponse(users=users)
+
+
+@router.post("/billing", response_model=BillingResponse)
+def billing(
+    req: BillingRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if req.money <= 0:
+        raise HTTPException(status_code=400, detail="INVALID_AMOUNT")
+
+    db_request = crud_request.create_request(
+        db,
+        RequestCreate(
+            money=req.money,
+            message=req.message,
+            created_by=current_user.id,
+            completed=False,
+        ),
+    )
+
+    return BillingResponse(url="http://localhost:3000/request/{}".format(db_request.id))
