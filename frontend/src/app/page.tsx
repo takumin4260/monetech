@@ -1,7 +1,10 @@
-import React from 'react';
+'use client'
+import React, { useState }  from 'react';
 import Link from "next/link";
 
 export default function MobileLoginScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
@@ -24,6 +27,8 @@ export default function MobileLoginScreen() {
               <input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-3 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="example@email.com"
               />
@@ -37,6 +42,8 @@ export default function MobileLoginScreen() {
               <input
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-3 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="パスワードを入力してください"
               />
@@ -44,7 +51,14 @@ export default function MobileLoginScreen() {
 
             {/* Login Button */}
             <Link href="/home">
-              <button className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium">
+              <button 
+                disabled={!email || !password}
+                className={`w-full py-3 rounded-lg transition font-medium ${
+                  !email || !password 
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                }`}
+              >
                 ログイン
               </button>
             </Link>

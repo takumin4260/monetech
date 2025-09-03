@@ -6,7 +6,8 @@ import Link from 'next/link';
 export default function MobileAccountScreen() {
   const [transferAmount, setTransferAmount] = useState<string>(''); // 空文字で初期化
   const [message, setMessage] = useState<string>(''); // メッセージ用のstateを追加
-  
+  const maxNum = 10000 //@Todo ユーザーの口座金額に変更する
+
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
       {/* Main Content */}
@@ -79,7 +80,14 @@ export default function MobileAccountScreen() {
         {/* 送金ボタン */}
         <div className="flex justify-center mt-8">
           <Link href="../complete">
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
+            <button 
+              disabled={!transferAmount || Number(transferAmount) > maxNum}
+              className={`w-full font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out ${
+                !transferAmount || Number(transferAmount) > maxNum
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-blue-500 hover:bg-blue-600 text-white'
+              }`}
+            >
               送金
             </button>
           </Link>
