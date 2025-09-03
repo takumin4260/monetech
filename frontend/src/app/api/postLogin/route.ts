@@ -14,6 +14,6 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({ email, password }),
       cache: 'no-store',
     });
-    console.log("upstream")
+
     return NextResponse.json({ ok: true }, { status: 200 });
 }

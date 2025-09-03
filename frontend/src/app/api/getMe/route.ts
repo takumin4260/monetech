@@ -1,23 +1,14 @@
-// ここにbackendのendpointをたたく
-import  {NextResponse} from "next/server"
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
-    // const upstream = await fetch(
-    //     "http://localhost:8000/me"
-    // )
+export async function GET(req: NextRequest) {
+  const upstream = await fetch("http://localhost:8000/me", {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+    cache: 'no-store',
+  });
 
-    // const data = upstream.json
-
-    const data = {
-        user:{
-            id:1,
-            name:"test",
-            icon:"test.png"
-        },
-        account:{
-            deposit:3000,
-            account_number:1
-        }
-    }
-    return NextResponse.json(data)
+  const data = await upstream.json();
+  return NextResponse.json(data);
 }
