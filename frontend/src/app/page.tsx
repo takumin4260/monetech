@@ -9,13 +9,7 @@ export default function MobileLoginScreen() {
       <div className="px-8 pt-16">
         {/* Logo/Header Section */}
         <div className="text-center mb-12">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-300 to-green-400 flex items-center justify-center mx-auto mb-6">
-            <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center">
-              <div className="w-10 h-8 bg-orange-300 rounded-full"></div>
-              <div className="absolute w-8 h-8 bg-pink-300 rounded-full mt-3"></div>
-            </div>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">ログインしてください</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">ログイン</h1>
           <p className="text-sm text-gray-600">アカウントにアクセスするためにログインが必要です</p>
         </div>
 
