@@ -5,7 +5,7 @@ from schemas.send import Send, SendCreate
 from crud import send as crud_send
 
 router = APIRouter(
-    prefix="/sends",
+    prefix="/debug/sends",
     tags=["sends"],
 )
 
