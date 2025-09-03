@@ -48,6 +48,14 @@ export default async function MobileAccountScreen() {
             </button>
           </Link>
         </div>
+
+        <div className="flex justify-center">
+          <Link href="/request">
+            <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+              請求する
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
