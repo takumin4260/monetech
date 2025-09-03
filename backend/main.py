@@ -1,12 +1,25 @@
 from fastapi import FastAPI
-from database import engine, Base
+from database import engine, Base, SessionLocal
 from routers import user, account, request, send, api, auth
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+from contextlib import asynccontextmanager
+from initial_data import create_initial_data
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    db = SessionLocal()
+    try:
+        create_initial_data(db)
+    finally:
+        db.close()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(SessionMiddleware, secret_key="your_secret_key")
 
