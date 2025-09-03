@@ -6,7 +6,7 @@ from crud import request as crud_request
 from uuid import UUID
 
 router = APIRouter(
-    prefix="/requests",
+    prefix="/debug/requests",
     tags=["requests"],
 )
 

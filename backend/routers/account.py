@@ -5,7 +5,7 @@ from schemas.account import Account, AccountCreate
 from crud import account as crud_account
 
 router = APIRouter(
-    prefix="/accounts",
+    prefix="/debug/accounts",
     tags=["accounts"],
 )
 

@@ -5,7 +5,7 @@ from schemas.user import User, UserCreate
 from crud import user as crud_user
 
 router = APIRouter(
-    prefix="/users",
+    prefix="/debug/users",
     tags=["users"],
 )
 
