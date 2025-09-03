@@ -3,10 +3,10 @@ import  {NextResponse} from "next/server"
 
 // contextを引数として受け取る
 export async function GET(
-    context: { params: { id: string } }
+    {params}: { params: { id: string } }
 ) {
   // paramsオブジェクトからidを取得
-  const { id } = context.params;
+  const { id } = params;
 
   const upstream = await fetch(
     // 取得したidをURLに埋め込む
