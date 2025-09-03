@@ -29,4 +29,3 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 def get_users(db: Session = Depends(get_db)):
     users = crud_user.get_all_users(db)
     return UsersResponse(users=users)
-    return UserResponse(user=user, account=account)
