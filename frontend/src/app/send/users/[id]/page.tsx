@@ -52,7 +52,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
           </div>
         </div>
 
-        <div className="mb-8 mt-8">
+        <div className="mb-8">
           <p className="text-sm text-gray-600">送金金額</p>
         </div>
 
