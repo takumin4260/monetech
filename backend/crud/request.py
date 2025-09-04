@@ -19,3 +19,6 @@ def create_request(db: Session, request: RequestCreate) -> Request:
     db.commit()
     db.refresh(db_request)
     return db_request
+
+def get_all_requests(db: Session) -> list[Request]:
+    return db.query(Request).all()
