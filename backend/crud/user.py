@@ -4,11 +4,11 @@ from schemas.user import UserCreate
 from utils.security import hash_password, verify_password
 
 
-def get_user_by_id(db: Session, user_id: int):
+def get_user_by_id(db: Session, user_id: int) -> User | None:
     return db.query(User).filter(User.id == user_id).first()
 
 
-def get_user_by_email(db: Session, email: str):
+def get_user_by_email(db: Session, email: str) -> User | None:
     return db.query(User).filter(User.email == email).first()
 
 
@@ -28,7 +28,7 @@ def get_all_users(db: Session) -> list[User]:
     return db.query(User).all()
 
 
-def authenticate_user(db: Session, email: str, password: str):
+def authenticate_user(db: Session, email: str, password: str) -> User | None:
     user = get_user_by_email(db, email)
 
     if user is None:

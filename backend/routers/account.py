@@ -11,12 +11,12 @@ router = APIRouter(
 
 
 @router.post("/", response_model=Account)
-def create_account(account: AccountCreate, db: Session = Depends(get_db)):
+def create_account(account: AccountCreate, db: Session = Depends(get_db)) -> Account:
     return crud_account.create_account(db=db, account=account)
 
 
 @router.get("/{account_number}", response_model=Account)
-def read_account(account_number: int, db: Session = Depends(get_db)):
+def read_account(account_number: int, db: Session = Depends(get_db)) -> Account:
     db_account = crud_account.get_account_by_account_number(
         db, account_number=account_number
     )
