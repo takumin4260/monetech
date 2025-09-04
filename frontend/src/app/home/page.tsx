@@ -1,12 +1,33 @@
-import React from 'react';
+"use client"
+
+import { components } from "@/app/gen/schema";
 import Link from "next/link"; 
-import { getMe } from '@/app/lib/client/getMe';
-export default async function MobileAccountScreen() {
-  const loginUser = await getMe();
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+type MeResponse = components["schemas"]["MeResponse"];
+
+export default function MobileAccountScreen() {
+  const [loginUser, setLoginUser] = useState<MeResponse | null>(null);
+
+  const router = useRouter();
+
+  const fetchUserData = async () => {
+    const response = await fetch("http://localhost:8000/me", {
+      credentials: "include",
+    });
+    const data = await response.json();
+    setLoginUser(data);
+  }
+
+  useEffect(() => {
+    fetchUserData();
+  }, [router])
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
       {/* Main Content */}
+      {loginUser &&(
       <div className="px-8 pt-8">
         {/* Profile Section */}
         <div className="flex items-center space-x-4 mb-8">
@@ -48,6 +69,7 @@ export default async function MobileAccountScreen() {
           </Link>
         </div>
       </div>
+      )}
     </div>
   );
 }
