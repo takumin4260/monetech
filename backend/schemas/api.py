@@ -26,3 +26,12 @@ class TransfersRequest(BaseModel):
 
 class TransfersResponse(BaseModel):
     completed: bool
+
+
+class BillingRequest(BaseModel):
+    money: NonNegativeInt
+    message: str | None
+
+
+class BillingResponse(BaseModel):
+    url: str

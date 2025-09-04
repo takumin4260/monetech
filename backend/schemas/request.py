@@ -8,6 +8,7 @@ class RequestBase(BaseModel):
     money: NonNegativeInt
     message: str | None
     created_by: int
+    completed: bool
 
 
 class RequestCreate(RequestBase):

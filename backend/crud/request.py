@@ -10,7 +10,10 @@ def get_request_by_id(db: Session, request_id: UUID) -> Request | None:
 
 def create_request(db: Session, request: RequestCreate) -> Request:
     db_request = Request(
-        money=request.money, message=request.message, created_by=request.created_by
+        money=request.money,
+        message=request.message,
+        created_by=request.created_by,
+        completed=request.completed,
     )
     db.add(db_request)
     db.commit()

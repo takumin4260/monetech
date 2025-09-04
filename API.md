@@ -25,14 +25,22 @@
 - `account_number`: int(連番)
 - `deposit`: integer  // 整数円
 
-### Transfer
-- `id`: int (連番)
-- `from_user_id`: int
-- `to_user_id`: int
-- `amount`: integer
+### Request
+- `id`: UUID
+- `money`: integer
 - `message`: string | null
-- `date`: string (ISO 8601)
+- `created_by`: integer
+- `date`: datetime
 - `completed`: boolean
+
+### Send
+- `id`: integer
+- `from_user`: integer
+- `to_user`: integer
+- `money`: integer
+- `message`: string | null
+- `date`: datetime
+- `request_id`: UUID | None
 
 ---
 
@@ -114,7 +122,7 @@
     "icon": "u2.png"
   },
   "account": {
-    "account_number": "98765432"
+    "account_number": 98765432
   }
 }
 ```
@@ -142,3 +150,21 @@
 ```
 
 ---
+
+### 5. 請求作成
+**POST /billing**
+- 請求の作成を行う
+
+**request例**
+```
+{
+  "money": 5000,
+  "message": "5000円お願いします！"
+}
+```
+**response例**
+```
+{
+  "url": localhost:3000/request/UUID
+}
+```
