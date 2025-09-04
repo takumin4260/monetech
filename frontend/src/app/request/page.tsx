@@ -44,7 +44,7 @@ export default function RequestLinkScreen() {
     });
     const data: URLResponse = await response.json();
     if (data.url) {
-      router.push("/request/complete");
+      router.push(`/request/complete?url=${encodeURIComponent(data.url)}`);
     }
   }
 

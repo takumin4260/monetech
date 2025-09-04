@@ -1,13 +1,18 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
-export default function RequestLinkCompletionPage() {
-  const requestLink = "http://localhost:3000/users/2"; //@Todo 請求リンクに変更する
+function CompleteContent() {
+  const searchParams = useSearchParams();
+
+  const generatedUrl = searchParams.get("url");
+  const requestLink = generatedUrl ? decodeURIComponent(generatedUrl) : null;
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = () => {
+    if (!requestLink) return;
     navigator.clipboard.writeText(requestLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000); // 2秒後に元に戻る
@@ -65,4 +70,12 @@ export default function RequestLinkCompletionPage() {
       </div>
     </div>
   );
+}
+
+export default function RequestLinkCompletionPage() {
+  return (
+    <Suspense fallback={<div className="w-[400px] min-h-screen bg-gray-50 mx-auto flex items-center justify-center">読み込み中...</div>}>
+      <CompleteContent />
+    </Suspense>
+  )
 }
