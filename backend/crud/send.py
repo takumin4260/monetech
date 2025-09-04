@@ -27,3 +27,6 @@ def delete_send(db: Session, send_id: int):
         db.commit()
         return True
     return False
+
+def get_all_sends(db: Session) -> list[Send]:
+    return db.query(Send).all()
