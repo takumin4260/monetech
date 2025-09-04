@@ -6,7 +6,8 @@ import { getUsers } from '@/app/lib/client/getUsers';
 type User = components["schemas"]["User"];
 
 export default async function TransferRecipientScreen() {
-  const recipients: User[] = await getUsers();
+  const recipients= await getUsers();
+  console.log(recipients);
   const avatarColors = [
     'bg-orange-300', 'bg-yellow-300', 'bg-pink-300', 'bg-blue-300',
     'bg-green-300', 'bg-purple-300', 'bg-red-300', 'bg-teal-300',
@@ -23,7 +24,7 @@ export default async function TransferRecipientScreen() {
 
       {/* Recipients List */}
       <div className="px-6 py-4">
-        {recipients.map((recipient, index) => (
+        {recipients.users.map((recipient, index) => (
           <Link
             key={recipient.id}
             href={`/send/users/${recipient.id}`}
