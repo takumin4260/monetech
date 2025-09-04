@@ -1,52 +1,87 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { components } from "@/app/gen/schema";
 import { getUsers } from '@/app/lib/client/getUsers';
 
 type User = components["schemas"]["User"];
 
-export default async function TransferRecipientScreen() {
-  const recipients= await getUsers();
-  console.log(recipients);
+export default function TransferRecipientScreen() {
+  const [recipients, setRecipients] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const data = await getUsers();
+      console.log("data", data);
+      setRecipients(data);
+    })();
+  }, []);
+  console.log("recipients", recipients);
+
   const avatarColors = [
-    'bg-orange-300', 'bg-yellow-300', 'bg-pink-300', 'bg-blue-300',
-    'bg-green-300', 'bg-purple-300', 'bg-red-300', 'bg-teal-300',
-    'bg-indigo-300', 'bg-rose-300',
+    'from-orange-400 to-orange-500',
+    'from-yellow-400 to-yellow-500', 
+    'from-pink-400 to-pink-500',
+    'from-blue-400 to-blue-500',
+    'from-green-400 to-green-500',
+    'from-purple-400 to-purple-500',
+    'from-red-400 to-red-500',
+    'from-teal-400 to-teal-500',
+    'from-indigo-400 to-indigo-500',
+    'from-rose-400 to-rose-500',
   ];
 
   return (
-    <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 bg-gray-50 border-b border-gray-200">
-        <h1 className="text-lg font-medium text-gray-800">送金相手を選択</h1>
-        <div className="w-6"></div> {/* Spacer for center alignment */}
+    <div className="w-[400px] min-h-screen bg-gradient-to-br from-red-400 via-pink-500 to-rose-600 mx-auto relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-red-200 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-5 w-24 h-24 bg-pink-200 rounded-full blur-2xl"></div>
       </div>
-
-      {/* Recipients List */}
-      <div className="px-6 py-4">
-        {recipients.users.map((recipient, index) => (
-          <Link
-            key={recipient.id}
-            href={`/send/users/${recipient.id}`}
-            className="block"
-          >
-            <div
-              className="flex items-center space-x-4 py-4 border-b border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors"
-            >
-              {/* Avatar */}
-              <div className={`w-12 h-12 rounded-full ${avatarColors[index % avatarColors.length]} flex items-center justify-center`}>
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                  <div className="w-6 h-4 bg-gray-400 rounded-full"></div>
+      <div className="relative z-10">
+        {/* Header */}
+        <div className="px-6 py-6 pt-12">
+          <div className="text-center mb-2">
+            <h1 className="text-2xl font-bold text-white">送金相手を選択</h1>
+          </div>
+        </div>
+        {/* Recipients List */}
+        <div className="px-6 pb-8">
+          <div className="space-y-3">
+            {recipients.users?.map((recipient, index) => (
+              <Link 
+                key={recipient.id} 
+                href={`/send/users/${recipient.id}`}
+                className="block"
+              >
+                <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-4 border border-white shadow-lg hover:bg-white transition-all duration-300 cursor-pointer group mb-2">
+                  <div className="flex items-center space-x-4">
+                    {/* Avatar */}
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${avatarColors[index % avatarColors.length]} flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300`}>
+                      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                        <div className="w-4 h-4 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full"></div>
+                      </div>
+                    </div>
+                                     
+                    {/* Name */}
+                    <div className="flex-1">
+                      <p className="text-lg font-semibold text-gray-800">{recipient.name}</p>
+                      <p className="text-gray-600 text-sm">タップして送金</p>
+                    </div>
+                     
+                    {/* Arrow icon */}
+                    <div className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m9 5 7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              {/* Name */}
-              <div className="flex-1">
-                <p className="text-base font-medium text-gray-800">{recipient.name}</p>
-              </div>
-            </div>
-          </Link>
-        ))}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
