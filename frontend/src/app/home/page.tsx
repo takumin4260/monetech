@@ -1,7 +1,6 @@
 "use client"
-
 import { components } from "@/app/gen/schema";
-import Link from "next/link"; 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -9,7 +8,6 @@ type MeResponse = components["schemas"]["MeResponse"];
 
 export default function MobileAccountScreen() {
   const [loginUser, setLoginUser] = useState<MeResponse | null>(null);
-
   const router = useRouter();
 
   const fetchUserData = async () => {
@@ -25,51 +23,102 @@ export default function MobileAccountScreen() {
   }, [router])
 
   return (
-    <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
-      {/* Main Content */}
-      {loginUser &&(
-      <div className="px-8 pt-8">
-        {/* Profile Section */}
-        <div className="flex items-center space-x-4 mb-8">
-          {/* Avatar */}
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-300 to-green-400 flex items-center justify-center overflow-hidden">
-            <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-              <div className="w-8 h-6 bg-orange-300 rounded-full"></div>
-              <div className="absolute w-6 h-6 bg-pink-300 rounded-full mt-2"></div>
-            </div>
-          </div>
-
-          {/* Name */}
-          <div>
-            <h2 className="text-lg font-medium text-gray-800">{loginUser.user.name}</h2>
-          </div>
-        </div>
-
-        {/* Account Info */}
-        <div className="mb-2">
-          <p className="text-sm text-gray-600">口座番号：{loginUser.account.account_number}</p>
-        </div>
-
-        <div className="mb-8">
-          <p className="text-sm text-gray-600">普通預金</p>
-        </div>
-
-        {/* Balance Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-800">{loginUser.account.deposit+"円"}</p>
-          </div>
-        </div>
-
-        <div className="flex justify-center">
-          <Link href="/send/users">
-            <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-              送金する
-            </button>
-          </Link>
-        </div>
+    <div className="w-[400px] min-h-screen bg-gradient-to-br from-red-400 via-pink-500 to-rose-600 mx-auto relative overflow-hidden pt-15">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-red-200 rounded-full blur-3xl"></div>
       </div>
-      )}
+      
+      {/* Main Content */}
+      <div className="relative z-10 px-6 pt-12 pb-8">
+        {loginUser && (
+          <>
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-bold text-white mb-2">マイウォレット</h1>
+              <p className="text-red-100">残高とお取引</p>
+            </div>
+
+            {/* Profile Card */}
+            <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 mb-6 border border-white shadow-xl">
+              <div className="flex items-center space-x-4 mb-6">
+                {/* Modern Avatar with Gradient */}
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-300 to-green-400 flex items-center justify-center shadow-lg overflow-hidden">
+                  <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center relative">
+                    <div className="w-8 h-6 bg-orange-300 rounded-full"></div>
+                    <div className="absolute w-6 h-6 bg-pink-300 rounded-full mt-2"></div>
+                  </div>
+                </div>
+                
+                {/* User Info */}
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold text-gray-800">{loginUser.user.name}</h2>
+                  <p className="text-gray-600 text-sm">口座番号：{loginUser.account.account_number}</p>
+                  <p className="text-gray-600 text-sm">普通預金</p>
+                </div>
+              </div>
+
+              {/* Balance Display */}
+              <div className="text-center">
+                <p className="text-sm text-gray-600 mb-1">現在の残高</p>
+                <p className="text-4xl font-bold text-gray-800 mb-2">¥{loginUser.account.deposit.toLocaleString()}</p>
+              </div>
+            </div>
+
+            {/* Action Cards */}
+            <div className="space-y-4">
+              {/* Send Money Card */}
+              <div>
+                <Link href="/send/users">
+                  <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-white shadow-lg hover:bg-white transition-all duration-300 cursor-pointer group">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-red-500 rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m7 11 5-5m0 0 5 5m-5-5v12" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-800 font-semibold text-lg">送金する</h3>
+                          <p className="text-gray-600 text-sm">友達や家族に送金</p>
+                        </div>
+                      </div>
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m9 5 7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Request Money Card */}
+              <div>
+                <Link href="/request">
+                  <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-white shadow-lg hover:bg-white transition-all duration-300 cursor-pointer group">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m17 13-5 5m0 0-5-5m5 5V6" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-800 font-semibold text-lg">請求する</h3>
+                          <p className="text-gray-600 text-sm">支払いをリクエスト</p>
+                        </div>
+                      </div>
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m9 5 7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
