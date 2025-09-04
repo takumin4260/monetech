@@ -60,8 +60,8 @@ export default function MobileAccountScreen() {
                 
                 {/* User Info */}
                 <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-gray-800">{loginUser.user.name}</h2>
-                  <p className="text-gray-600 text-sm">口座番号：{loginUser.account.account_number}</p>
+                  <h2 className="text-lg font-semibold text-gray-800">{loginUser?.user?.name}</h2>
+                  <p className="text-gray-600 text-sm">口座番号：{loginUser?.account?.account_number}</p>
                   <p className="text-gray-600 text-sm">普通預金</p>
                 </div>
               </div>
@@ -69,7 +69,7 @@ export default function MobileAccountScreen() {
               {/* Balance Display */}
               <div className="text-center">
                 <p className="text-sm text-gray-600 mb-1">現在の残高</p>
-                <p className="text-4xl font-bold text-gray-800 mb-2">¥{loginUser.account.deposit.toLocaleString()}</p>
+                <p className="text-4xl font-bold text-gray-800 mb-2">¥{loginUser?.account?.deposit.toLocaleString()}</p>
               </div>
             </div>
 

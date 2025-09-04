@@ -64,7 +64,7 @@ function TransferComponent() {
   }
 
   const [transferAmount, setTransferAmount] = useState<string>(String(moneyParam || ""));
-  const maxNum = loginUser?.account.deposit || 0;
+  const maxNum = loginUser?.account?.deposit || 0;
   const showAmountError = transferAmount && Number(transferAmount) > maxNum;
   const [message, setMessage] = useState<string>("");
 
@@ -99,7 +99,7 @@ function TransferComponent() {
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-gray-800">
-                {user?.user.name ?? "サンプル 氏名"}
+                {user?.user?.name ?? "サンプル 氏名"}
               </h2>
             </div>
           
@@ -112,7 +112,7 @@ function TransferComponent() {
             <p className="text-sm text-gray-600">送金上限額</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-800">{loginUser?.account.deposit}円</p>
+            <p className="text-2xl font-bold text-gray-800">{loginUser?.account?.deposit}円</p>
           </div>
         </div>
 
