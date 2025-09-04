@@ -8,6 +8,8 @@ import { components } from "@/app/gen/schema";
 
 type MeResponse = components["schemas"]["MeResponse"];
 type UserDetailResponse = components["schemas"]["UserDetailResponse"];
+type TransferCreateRequest = components["schemas"]["TransferCreateRequest"];
+type CompletedResponse = components["schemas"]["CompletedResponse"];
 
 export default function MobileAccountScreen({ params }: { params: { id: string } }) {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +37,27 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
       setUser(data);
     })();
   }, [id]);
+
+  const handleTransfer = async () => {
+    if (!loginUser || !user || !transferAmount) return;
+    const body: TransferCreateRequest = {
+      to_user_id: user.user.id,
+      money: parseInt(transferAmount),
+      message: message || null,
+    }
+    const response = await fetch("http://localhost:8000/transfers", {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const data: CompletedResponse = await response.json();
+    if (data.completed === true) {
+      router.push("../complete");
+    }
+  }
 
   const [transferAmount, setTransferAmount] = useState<string>("");
   const maxNum = loginUser?.account.deposit || 0;
@@ -118,6 +141,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-blue-500 hover:bg-blue-600 text-white"
               }`}
+              onClick={handleTransfer}
             >
               送金
             </button>
