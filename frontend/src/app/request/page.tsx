@@ -34,7 +34,7 @@ export default function RequestLinkScreen() {
       money: parseInt(requestAmount),
       message: message || null,
     }
-    const response = await fetch("http://localhost:8000/billings", {
+    const response = await fetch("http://localhost:8000/billing", {
       credentials: "include",
       method: "POST",
       headers: {
@@ -44,7 +44,7 @@ export default function RequestLinkScreen() {
     });
     const data: URLResponse = await response.json();
     if (data.url) {
-      router.push("/complete");
+      router.push("/request/complete");
     }
   }
 
