@@ -1,13 +1,23 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { components } from "@/app/gen/schema";
 import { getUsers } from '@/app/lib/client/getUsers';
 
 type User = components["schemas"]["User"];
 
-export default async function TransferRecipientScreen() {
-  const recipients= await getUsers();
-  console.log(recipients);
+export default function TransferRecipientScreen() {
+  const [recipients, setRecipients] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const data = await getUsers();
+      console.log("data", data);
+      setRecipients(data);
+    })();
+  }, []);
+  console.log("recipients", recipients);
+
   const avatarColors = [
     'from-orange-400 to-orange-500',
     'from-yellow-400 to-yellow-500', 
@@ -29,7 +39,6 @@ export default async function TransferRecipientScreen() {
         <div className="absolute bottom-20 right-10 w-40 h-40 bg-red-200 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 right-5 w-24 h-24 bg-pink-200 rounded-full blur-2xl"></div>
       </div>
-
       <div className="relative z-10">
         {/* Header */}
         <div className="px-6 py-6 pt-12">
@@ -40,7 +49,7 @@ export default async function TransferRecipientScreen() {
         {/* Recipients List */}
         <div className="px-6 pb-8">
           <div className="space-y-3">
-            {recipients.users.map((recipient, index) => (
+            {recipients.users?.map((recipient, index) => (
               <Link 
                 key={recipient.id} 
                 href={`/send/users/${recipient.id}`}
