@@ -74,6 +74,7 @@ export default function RequestLinkScreen() {
             <span className="text-2xl font-bold text-gray-800 mr-2">¥</span>
             <input
               type="number"
+              min={0}
               value={requestAmount}
               onChange={(e) => setRequestAmount(e.target.value)}
               className="text-2xl font-bold text-gray-800 w-full text-center focus:outline-none bg-transparent"
