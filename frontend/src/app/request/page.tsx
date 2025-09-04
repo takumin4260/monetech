@@ -1,11 +1,52 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { components } from '../gen/schema';
+import { useRouter } from 'next/navigation';
+
+type MeResponse = components["schemas"]["MeResponse"];
+type BillingCreateRequest = components["schemas"]["BillingCreateRequest"];
+type URLResponse = components["schemas"]["URLResponse"];
 
 export default function RequestLinkScreen() {
   const [requestAmount, setRequestAmount] = useState<string>(''); // 請求金額
   const [message, setMessage] = useState<string>(''); // メッセージ用のstate
+  const [loginUser, setLoginUser] = useState<MeResponse | null>(null);
+
+  const router = useRouter();
+
+  const fetchUserData = async () => {
+    const response = await fetch("http://localhost:8000/me", {
+      credentials: "include",
+    });
+    const data = await response.json();
+    setLoginUser(data);
+  }
+
+  useEffect(() => {
+    fetchUserData();
+  }, [router]);
+
+  const handleBilling = async () => {
+    if (!loginUser || !requestAmount) return;
+    const body: BillingCreateRequest = {
+      money: parseInt(requestAmount),
+      message: message || null,
+    }
+    const response = await fetch("http://localhost:8000/billings", {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const data: URLResponse = await response.json();
+    if (data.url) {
+      router.push("/complete");
+    }
+  }
 
   return (
     <div className="w-[400px] min-h-screen bg-gray-50 mx-auto">
@@ -64,6 +105,7 @@ export default function RequestLinkScreen() {
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 : 'bg-red-400 hover:bg-red-500 text-white shadow-lg'
             }`}
+            onClick={handleBilling}
           >
             リンクを作成
           </button>
