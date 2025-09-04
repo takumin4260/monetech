@@ -116,4 +116,6 @@ def billing(
         ),
     )
 
-    return BillingResponse(url=f"http://localhost:3000/send/users/{current_user.id}?money={db_request.money}&mode=billing")
+    return BillingResponse(
+        url=f"http://localhost:3000/send/users/{current_user.id}?money={db_request.money}&mode=billing"
+    )
