@@ -156,7 +156,7 @@ export interface components {
             /** Format: int32 */
             to_user_id: number;
             /** @description Transfer amount in JPY (integer). */
-            amount: number;
+            money: number;
             message?: string | null;
             /**
              * Format: date-time
@@ -177,7 +177,7 @@ export interface components {
             /** Format: int32 */
             to_user_id: number;
             /** @description Amount in JPY (integer). */
-            amount: number;
+            money: number;
             message?: string | null;
         };
     };
