@@ -25,19 +25,10 @@
 - `account_number`: int(連番)
 - `deposit`: integer  // 整数円
 
-### Transfer
-- `id`: int (連番)
-- `from_user_id`: int
-- `to_user_id`: int
-- `amount`: integer
-- `message`: string | null
-- `date`: string (ISO 8601)
-- `completed`: boolean
-
 ### Request
 - `id`: UUID
 - `money`: integer
-- `message`: string
+- `message`: string | null
 - `created_by`: integer
 - `date`: datetime
 - `completed`: boolean
@@ -47,7 +38,7 @@
 - `from_user`: integer
 - `to_user`: integer
 - `money`: integer
-- `message`: string
+- `message`: string | null
 - `date`: datetime
 - `request_id`: UUID | None
 
