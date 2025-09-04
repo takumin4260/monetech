@@ -10,7 +10,9 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/login", response_model=UserPublic)
-def login(request: Request, form_data: AuthLogin, db: Session = Depends(get_db)) -> UserPublic:
+def login(
+    request: Request, form_data: AuthLogin, db: Session = Depends(get_db)
+) -> UserPublic:
     user = crud_user.authenticate_user(db, form_data.email, form_data.password)
     if user is None:
         raise HTTPException(
