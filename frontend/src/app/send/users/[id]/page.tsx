@@ -126,6 +126,7 @@ function TransferComponent() {
             <input
               type="number"
               value={transferAmount}
+              min={0}
               disabled={modeParam === "billing"}
               onChange={(e) => setTransferAmount(e.target.value)}
               className="text-2xl font-bold text-gray-800 w-full text-center focus:outline-none bg-transparent"
