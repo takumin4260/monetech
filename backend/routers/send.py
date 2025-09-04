@@ -29,3 +29,8 @@ def delete_send(send_id: int, db: Session = Depends(get_db)) -> None | Response:
     if not success:
         raise HTTPException(status_code=404, detail="Send not found")
     return Response(status_code=204)
+
+@router.get("/log/", response_model=list[Send])
+def read_all_sends(db: Session = Depends(get_db)) -> list[Send]:
+    sends = crud_send.get_all_sends(db)
+    return sends

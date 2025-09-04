@@ -23,3 +23,7 @@ def read_request(request_id: UUID, db: Session = Depends(get_db)) -> Request:
     if db_request is None:
         raise HTTPException(status_code=404, detail="Request not found")
     return db_request
+
+@router.get("/log/", response_model=list[Request])
+def read_all_requests(db: Session = Depends(get_db)) -> list[Request]:
+    return crud_request.get_all_requests(db)
