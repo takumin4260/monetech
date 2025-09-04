@@ -15,25 +15,28 @@ def create_initial_data(db: Session):
             name="太郎", icon="taro.png", email="taro@example.com", password="taro"
         )
         create_user(db, user1)
-        
+
         user2 = UserCreate(
-            name="花子", icon="hanako.png", email="hanako@example.com", password="hanako"
+            name="花子",
+            icon="hanako.png",
+            email="hanako@example.com",
+            password="hanako",
         )
         create_user(db, user2)
-        
+
         user3 = UserCreate(
             name="次郎", icon="jiro.png", email="jiro@example.com", password="jiro"
         )
         create_user(db, user3)
 
     existing_account = db.query(Account).first()
-    
+
     if existing_account is None:
         account1 = AccountCreate(user_id=1, deposit=10000)
         create_account(db, account1)
-        
+
         account2 = AccountCreate(user_id=2, deposit=15000)
         create_account(db, account2)
-        
+
         account3 = AccountCreate(user_id=3, deposit=20000)
         create_account(db, account3)
