@@ -23,7 +23,7 @@ def read_send(send_id: int, db: Session = Depends(get_db)) -> Send:
     return db_send
 
 
-@router.delete("/{send_id}")
+@router.delete("/{send_id}", response_model=None, status_code=204)
 def delete_send(send_id: int, db: Session = Depends(get_db)) -> None | Response:
     success = crud_send.delete_send(db, send_id)
     if not success:
