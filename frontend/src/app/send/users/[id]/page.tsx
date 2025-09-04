@@ -1,14 +1,34 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getUser } from "@/app/lib/client/getUser";
+import { components } from "@/app/gen/schema";
+
+type MeResponse = components["schemas"]["MeResponse"];
+type UserDetailResponse = components["schemas"]["UserDetailResponse"];
 
 export default function MobileAccountScreen({ params }: { params: { id: string } }) {
   const { id } = useParams<{ id: string }>();
 
-  const [user, setUser] = useState(null);
+  const [loginUser, setLoginUser] = useState<MeResponse | null>(null);
+  const [user, setUser] = useState<UserDetailResponse | null>(null);
+  
+  const router = useRouter();
+  
+    const fetchUserData = async () => {
+      const response = await fetch("http://localhost:8000/me", {
+        credentials: "include",
+      });
+      const data = await response.json();
+      setLoginUser(data);
+    }
+  
+    useEffect(() => {
+      fetchUserData();
+    }, [router])
+
   useEffect(() => {
     (async () => {
       const data = await getUser(id);
@@ -17,7 +37,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
   }, [id]);
 
   const [transferAmount, setTransferAmount] = useState<string>("");
-  const maxNum = user?.account?.deposit || 0;
+  const maxNum = loginUser?.account.deposit || 0;
   const showAmountError = transferAmount && Number(transferAmount) > maxNum;
   const [message, setMessage] = useState<string>("");
 
@@ -37,7 +57,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
           </div>
           <div>
             <h2 className="text-lg font-medium text-gray-800">
-              {user?.name ?? "サンプル 氏名"}
+              {user?.user.name ?? "サンプル 氏名"}
             </h2>
           </div>
         </div>
@@ -48,7 +68,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
 
         <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-800">50,000円</p>
+            <p className="text-2xl font-bold text-gray-800">{loginUser?.account.deposit}円</p>
           </div>
         </div>
 
