@@ -95,7 +95,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-gray-800">
-                {user?.name ?? "サンプル 氏名"}
+                {user?.user.name ?? "サンプル 氏名"}
               </h2>
             </div>
           
