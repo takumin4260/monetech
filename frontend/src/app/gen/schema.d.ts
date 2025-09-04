@@ -180,6 +180,13 @@ export interface components {
             money: number;
             message?: string | null;
         };
+        BillingCreateRequest: {
+            money: number;
+            message?: string | null;
+        };
+        URLResponse: {
+            url: string;
+        };
     };
     responses: {
         /** @description Unauthorized */
