@@ -10,6 +10,13 @@ export default function MobileAccountScreen() {
   const [loginUser, setLoginUser] = useState<MeResponse | null>(null);
   const router = useRouter();
 
+  const handleLogout = async () => {
+    await fetch("http://localhost:8000/auth/logout", {
+      credentials: "include",
+      method: "POST",
+    });
+  }
+
   const fetchUserData = async () => {
     const response = await fetch("http://localhost:8000/me", {
       credentials: "include",
@@ -53,8 +60,8 @@ export default function MobileAccountScreen() {
                 
                 {/* User Info */}
                 <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-gray-800">{loginUser.user.name}</h2>
-                  <p className="text-gray-600 text-sm">口座番号：{loginUser.account.account_number}</p>
+                  <h2 className="text-lg font-semibold text-gray-800">{loginUser?.user?.name}</h2>
+                  <p className="text-gray-600 text-sm">口座番号：{loginUser?.account?.account_number}</p>
                   <p className="text-gray-600 text-sm">普通預金</p>
                 </div>
               </div>
@@ -62,7 +69,7 @@ export default function MobileAccountScreen() {
               {/* Balance Display */}
               <div className="text-center">
                 <p className="text-sm text-gray-600 mb-1">現在の残高</p>
-                <p className="text-4xl font-bold text-gray-800 mb-2">¥{loginUser.account.deposit.toLocaleString()}</p>
+                <p className="text-4xl font-bold text-gray-800 mb-2">¥{loginUser?.account?.deposit.toLocaleString()}</p>
               </div>
             </div>
 
@@ -106,6 +113,30 @@ export default function MobileAccountScreen() {
                         <div>
                           <h3 className="text-gray-800 font-semibold text-lg">請求する</h3>
                           <p className="text-gray-600 text-sm">支払いをリクエスト</p>
+                        </div>
+                      </div>
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m9 5 7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Logout Card */}
+              <div>
+                <Link href="../" onClick={handleLogout}>
+                  <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 border border-white shadow-lg hover:bg-white transition-all duration-300 cursor-pointer group">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                          {/* <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m17 13-5 5m0 0-5-5m5 5V6" />
+                          </svg> */}
+                        </div>
+                        <div>
+                          <h3 className="text-gray-800 font-semibold text-lg">ログアウト</h3>
+                          {/* <p className="text-gray-600 text-sm">支払いをリクエスト</p> */}
                         </div>
                       </div>
                       <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

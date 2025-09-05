@@ -20,7 +20,7 @@ export default function TransferRecipientScreen() {
 
   const avatarColors = [
     'from-orange-400 to-orange-500',
-    'from-yellow-400 to-yellow-500', 
+    'from-yellow-400 to-yellow-500',
     'from-pink-400 to-pink-500',
     'from-blue-400 to-blue-500',
     'from-green-400 to-green-500',
@@ -50,26 +50,27 @@ export default function TransferRecipientScreen() {
         <div className="px-6 pb-8">
           <div className="space-y-3">
             {recipients.users?.map((recipient, index) => (
-              <Link 
-                key={recipient.id} 
+              <Link
+                key={recipient.id}
                 href={`/send/users/${recipient.id}`}
                 className="block"
               >
                 <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-4 border border-white shadow-lg hover:bg-white transition-all duration-300 cursor-pointer group mb-2">
                   <div className="flex items-center space-x-4">
                     {/* Avatar */}
-                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${avatarColors[index % avatarColors.length]} flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300`}>
-                      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                        <div className="w-4 h-4 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full"></div>
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-300 to-green-400 flex items-center justify-center shadow-lg overflow-hidden">
+                      <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center relative">
+                        <div className="w-8 h-6 bg-orange-300 rounded-full"></div>
+                        <div className="absolute w-6 h-6 bg-pink-300 rounded-full mt-2"></div>
                       </div>
                     </div>
-                                     
+
                     {/* Name */}
                     <div className="flex-1">
                       <p className="text-lg font-semibold text-gray-800">{recipient.name}</p>
                       <p className="text-gray-600 text-sm">タップして送金</p>
                     </div>
-                     
+
                     {/* Arrow icon */}
                     <div className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
                       <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

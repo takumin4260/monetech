@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { Suspense, useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getUser } from "@/app/lib/client/getUser";
 import { components } from "@/app/gen/schema";
@@ -11,7 +11,11 @@ type UserDetailResponse = components["schemas"]["UserDetailResponse"];
 type TransferCreateRequest = components["schemas"]["TransferCreateRequest"];
 type CompletedResponse = components["schemas"]["CompletedResponse"];
 
-export default function MobileAccountScreen({ params }: { params: { id: string } }) {
+function TransferComponent() {
+  const searchParams = useSearchParams();
+  const moneyParam = searchParams.get("money");
+  const modeParam = searchParams.get("mode");
+  
   const { id } = useParams<{ id: string }>();
 
   const [loginUser, setLoginUser] = useState<MeResponse | null>(null);
@@ -59,8 +63,8 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
     }
   }
 
-  const [transferAmount, setTransferAmount] = useState<string>("");
-  const maxNum = loginUser?.account.deposit || 0;
+  const [transferAmount, setTransferAmount] = useState<string>(String(moneyParam || ""));
+  const maxNum = loginUser?.account?.deposit || 0;
   const showAmountError = transferAmount && Number(transferAmount) > maxNum;
   const [message, setMessage] = useState<string>("");
 
@@ -95,7 +99,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-gray-800">
-                {user?.user.name ?? "サンプル 氏名"}
+                {user?.user?.name ?? "サンプル 氏名"}
               </h2>
             </div>
           
@@ -108,7 +112,7 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
             <p className="text-sm text-gray-600">送金上限額</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-800">{loginUser?.account.deposit}円</p>
+            <p className="text-2xl font-bold text-gray-800">{loginUser?.account?.deposit}円</p>
           </div>
         </div>
 
@@ -122,6 +126,8 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
             <input
               type="number"
               value={transferAmount}
+              min={0}
+              disabled={modeParam === "billing"}
               onChange={(e) => setTransferAmount(e.target.value)}
               className="text-2xl font-bold text-gray-800 w-full text-center focus:outline-none bg-transparent"
               placeholder="金額を入力"
@@ -172,4 +178,12 @@ export default function MobileAccountScreen({ params }: { params: { id: string }
       </div>
     </div>
   );
+}
+
+export default function MobileAccountScreen({ params }: { params: { id: string } }) {
+  return (
+    <Suspense fallback={<div className="w-[400px] min-h-screen bg-gray-50 mx-auto flex items-center justify-center">読み込み中...</div>}>
+      <TransferComponent />
+    </Suspense>
+  )
 }
